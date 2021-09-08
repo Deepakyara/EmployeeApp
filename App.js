@@ -7,7 +7,6 @@ import Home from './components/Home';
 import Leaves from './components/Leaves';
 import Attendance from './components/Attendance';
 import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
 import SalarySlip from './components/SalarySlip';
 
 
@@ -33,9 +32,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignIn">
-        {/* <Stack.Screen options={{headerShown:false}} name="Sign" component={Sign} /> */}
         <Stack.Screen options={{headerShown:false}} name="SignIn" component={SignIn} />
-        <Stack.Screen options={{headerShown:false}} name="SignUp" component={SignUp} />
         <Stack.Screen options={{headerShown:false}} name="Home" component={DrawerNav} />
       </Stack.Navigator>
 
