@@ -1,167 +1,142 @@
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  TouchableHighlight,
+  Image,
+  Alert,
+  SafeAreaView,
+  ScrollView
+} from 'react-native';
+import { getEmployeeById } from "../services/EmployeePSQL";
 
-  import React, { Component } from 'react';
-  import {
-      StyleSheet,
-      Text,
-      View,
-      TextInput,
-      Button,
-      TouchableHighlight,
-      Image,
-      Alert,
-      SafeAreaView
-  } from 'react-native';
-  import { getEmployeeById } from '../services/EmployeePSQL';
-  import { useEffect,useState } from 'react';
- 
+export default function Login() {
+
+  const [employee, setEmployee] = useState([]);
+
+  let id = 1;
+
+  let loadEmployee = async () => {
+    let list = await getEmployeeById(id);
+    setEmployee(list);
+  }
+
+  useEffect(()=>{
+      loadEmployee();
+  }, []);
   
-  
-  export default function Login() {
+  return (
+    <ScrollView style={{backgroundColor: 'white'}}>
+        <View style={styles.container}>
+            <View style={styles.welcomeContainer}>
+                <Text style={styles.name}>Welcome {employee.name}!</Text>
+            </View>
 
-    let [emp,setEmp] = useState({})
+            <View style={styles.perDetContainer}>
+                <View style={styles.subtitle}>
+                    <Text style={styles.subtitle1}>Personal Details</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Name</Text>
+                    <Text style={styles.detail}>{employee.name}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Address</Text>
+                    <Text style={styles.detail}>{employee.address}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Date Of Birth</Text>
+                    <Text style={styles.detail}>{employee.dateOfBirth}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Education</Text>
+                    <Text style={styles.detail}>{employee.education}</Text>
+                </View>
+            </View>
 
-    loadCustomers = async()=>{
-      let list = await getEmployeeById(2);
-      
-      console.log(list)
-      setEmp(emp=list);
-      console.log('hello 2')
-      console.log(emp)
-    
-    }
-
-    useEffect(()=>{
-        loadCustomers();
-    },[]);
-  
-    // useEffect(()=>{
-    //   const unsubscribe = navigation.addListener('focus', () => {
-    //     loadCustomers();
-    //   });
-    //   return unsubscribe;
-    // },[navigation]);
-
-    
-
-      return (
-        <SafeAreaView style={styles.container}>
-         
-        <View >
-          <Text style={styles.heading}>Hello {emp.name}</Text>
+            <View style={styles.emplContainer}>
+                <View style={styles.subtitle}>
+                    <Text style={styles.subtitle1}>Employment Details</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Employee ID</Text>
+                    <Text style={styles.detail}>{employee.id}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Email</Text>
+                    <Text style={styles.detail}>{employee.email}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Date Of Joining</Text>
+                    <Text style={styles.detail}>{employee.dateOfJoining}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Role</Text>
+                    <Text style={styles.detail}>{employee.role}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Active</Text>
+                    <Text style={styles.detail}>{employee.active}</Text>
+                </View>
+            </View>
+              
         </View>
+    </ScrollView>
+  );
 
-        <View >
+}
 
-          <Text style={styles.body}>ID                 : {emp.id}</Text>
-          <Text style={styles.body}>email           : {emp.name}</Text>
-          <Text style={styles.body}>address      : {emp.name}</Text>
-          <Text style={styles.body}>DOB            : {emp.name}</Text>
-          <Text style={styles.body}>DOJ            : {emp.name}</Text>
-          <Text style={styles.body}>Education  : {emp.name}</Text>
-          <Text style={styles.body}>Type           : {emp.name}</Text>
-          <Text style={styles.body}>Active         : {emp.name}</Text>
-        </View>
-
-        </SafeAreaView>
-        
-        
-      );
+const styles = StyleSheet.create({
+    container: {
+        padding: 15,
+    },
+    perDetContainer: {
+        margin: 8,
+        paddingBottom: 20
+    },
+    emplContainer: {
+        margin: 8,
+    },
+    welcomeContainer: {
+      flexDirection: "row",
+      marginBottom: 16,
+    },
+    name: {
+      fontSize: 33,
+      color: "#6600ee",
+      fontWeight: '900',
+      padding: 4,
+    },
+    subtitle: {
+      borderBottomColor: 'grey',
+      borderBottomWidth: 2,
+    },
+    subtitle1: {
+      fontSize: 25,
+      paddingBottom: 8,
+      color: '#000000',
+      fontWeight: '700'
+    },
+    detailsContainer: {
+      margin: 5,
+      backgroundColor: '#F7F6F2',
+      padding: 8,
+      borderBottomWidth: 3,
+      borderBottomColor: '#00ced1',
+      borderTopRightRadius: 75
+    },
+    detailsTitle: {
+      color: '#00ced1',
+      fontSize: 18,
+      fontWeight: '700',
+      paddingBottom: 7
+    },
+    detail: {
+      paddingTop: 4,
+      fontSize: 23,
+      fontFamily: "Times New Roman"
     }
-
-    const styles = StyleSheet.create({
-      container: {
-          paddingTop: 40,
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-      },
-
-      heading: {
-        color: '#6200ee',
-        fontSize: 50,
-        fontWeight: '600',
-    },
-      body: {
-        color: '#000000',
-        fontSize: 20,
-    },
-
-      continue: {
-          marginTop: 200,
-      },
-      inputContainer: {
-          width: 250,
-          height: 45,
-          marginBottom: 20,
-          flexDirection: 'row',
-          alignItems: 'center'
-      },
-      inputs: {
-          marginTop: 29,
-          height: 45,
-          borderBottomColor: 'grey',
-          borderBottomWidth: 1,
-          flex: 1,
-          color: 'black',
-          fontSize: 20,
-      },
-      continueContainer: {
-          height: 50,
-          width: 250,
-          borderRadius: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-      },
-      inputIcon: {
-          width: 30,
-          height: 30,
-          marginLeft: 15,
-          justifyContent: 'center'
-      },
-      continueContainer: {
-          marginTop: 50,
-          height: 50,
-          width: 300,
-          borderRadius: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: "#6200EE",
-      },
-      loginButton2: {
-          borderRadius: 60,
-          padding: 15,
-          paddingLeft: 50,
-          paddingRight: 20,
-          marginRight: 20,
-      },
-      loginButton1: {
-          backgroundColor: "#6200EE",
-          borderRadius: 60,
-          padding: 15,
-          paddingLeft: 20,
-          paddingRight: 20,
-          marginLeft: 20,
-          marginBottom:30
-      },
-      login2: {
-          color: 'grey',
-          fontSize: 16,
-          fontWeight: '600',
-      },
-      login1: {
-          color: 'white',
-          fontSize: 16,
-          fontWeight: '600',
-      },
-      loginText: {
-          color: 'white',
-          fontSize: 16,
-          fontWeight: '600',
-      },
-      forgotPassword:{
-          padding: 40,
-          fontSize: 15,
-          color: "#6200EE",
-      },
-  });
-  
-  
+});
