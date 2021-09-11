@@ -26,8 +26,8 @@ const Item = ({ item, onPress,style }) => (
         alignItems: 'stretch',
       }}>
         <View style={{flex:2,  height: 50}} >
-          <Text style={styles.body}> ID               : {item.id}</Text>
-          <Text style={styles.body}> Startdate : {item.startdate}</Text>
+          <Text style={styles.body}> EmployeeID     : {item.employeeid}</Text>
+          <Text style={styles.body}> Startdate          : {item.startdate}</Text>
           <Text style={styles.body}> Enddate   : {item.enddate}</Text>
           <Text style={styles.body}> Count       : {item.count}</Text>
         </View>
@@ -62,7 +62,10 @@ export default function Leaves()  {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList style={{margin:-90}}
+      <View>
+        <Text style={styles.base1Text}>Leave Details</Text>
+        </View>
+      <FlatList style={{margin:-90,backgroundColor: 'green'}}
         data={employees}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -87,6 +90,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor:'white',
     flex: 1,
+    flexDirection: 'column',
     marginTop: 0,
+},
+base1Text:{
+  marginTop:30,
+  fontSize:24,
+  marginHorizontal:120,
+  fontWeight:"bold",
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#6200EE',
+  marginBottom:0,
 },
 });
