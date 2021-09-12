@@ -50,7 +50,7 @@ export default function Login() {
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Date Of Birth</Text>
-                    <Text style={styles.detail}>{employee.dateOfBirth}</Text>
+                    <Text style={styles.detail}>{employee.dateOfBirth.substring(0,10)}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Education</Text>
@@ -72,15 +72,11 @@ export default function Login() {
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Date Of Joining</Text>
-                    <Text style={styles.detail}>{employee.dateOfJoining}</Text>
+                    <Text style={styles.detail}>{employee.dateOfJoining.substring(0,10)}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Role</Text>
                     <Text style={styles.detail}>{employee.role}</Text>
-                </View>
-                <View style={styles.detailsContainer}>
-                    <Text style={styles.detailsTitle}>Active</Text>
-                    <Text style={styles.detail}>{employee.active}</Text>
                 </View>
             </View>
               
