@@ -50,7 +50,7 @@ export default function Login() {
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Date Of Birth</Text>
-                    <Text style={styles.detail}>{employee.dateOfBirth.substring(0,10)}</Text>
+                    <Text style={styles.detail}>{employee.dateOfBirth}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Education</Text>
@@ -72,7 +72,7 @@ export default function Login() {
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Date Of Joining</Text>
-                    <Text style={styles.detail}>{employee.dateOfJoining.substring(0,10)}</Text>
+                    <Text style={styles.detail}>{employee.dateOfJoining}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.detailsTitle}>Role</Text>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
       marginBottom: 16,
     },
     name: {
-      fontSize: 33,
+      fontSize: 30,
       color: "#6600ee",
       fontWeight: '900',
       padding: 4,
