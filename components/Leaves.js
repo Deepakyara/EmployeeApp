@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Image,FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { getAttendanceById } from "../services/AttendancePSQL";
-
-//let DATA = getCustomers();
-//console.log(">>>DATA>>>>>>>",DATA);
-
+import { getLeavesById } from "../services/LeavesPSQL";
 
 const Item = ({ item, onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
@@ -15,16 +11,11 @@ const Item = ({ item, onPress, style }) => (
         justifyContent: 'center',
         alignItems: 'stretch',
       }}>
-        {/* <View style={{flex:8, height: 50, flexDirection: 'row'}} >
-            <View style={{flex:7, height: 50}}>
-                <Text style={styles.title}>{item.id}</Text>
-            </View>
-        </View> */}
-        <View style={{flex:2,  height: 90}} >
-            <Text style={styles.phone}>DATE                  : {item.date.substring(0,10)}</Text>
-            <Text style={styles.phone}>IN TIME              : {item.intimedate.substring(11,19)}</Text>
-            <Text style={styles.phone}>OUT TIME          : {item.outtime.substring(11,19)}</Text>
-            <Text style={styles.phone}>TOTAL HOURS  : {item.totalhours}</Text>
+      <View style={{flex:2,  height: 80}} >
+        <Text style={styles.phone}>Emp ID    : {item.employeeid}</Text>
+          <Text style={styles.phone}>Startdate   : {item.startdate}</Text>
+          <Text style={styles.phone}>Enddate    : {item.enddate}</Text>
+          <Text style={styles.phone}>Count       : {item.count}</Text>
         </View>  
       </View>
   </TouchableOpacity>
@@ -37,7 +28,7 @@ const CustomerApp = () => {
   let navigation = useNavigation();  // #6e3b6e #f9c2ff  
 
    loadCustomer = async()=>{
-    let list = await getAttendanceById(1);
+    let list = await getLeavesById(1);
     setCustomers(list);
     console.log("list",list);
   }
