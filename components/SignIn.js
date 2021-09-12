@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,23 +9,28 @@ import {
     SafeAreaView
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { authenticate, setDetails } from '../services/Users';
 
 
 export default class SignIn extends Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            email: '',
+            password: ''
+        }
     }
 
-    state = {
-        email: '',
-        password: ''
+    onLoginButton = async () => {
+        let list = await authenticate(this.state);
+        setDetails(list.id, list.token);
+        this.props.navigation.navigate('Home');
+        this.setState({
+            email: '',
+            password: ''
+        });
     }
-
-    onLoginButton = () => {
-        this.props.navigation.navigate('Home', {});
-    }
-
 
 
     render() {
@@ -37,7 +42,7 @@ export default class SignIn extends Component {
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.inputs}
                         placeholder="Email"
-                        keyboardType="email-address"
+                        keyboardType="name-phone-pad"
                         value={this.state.email}
                         underlineColorAndroid='transparent'
                         onChangeText={(email) => this.setState({ email })} />
