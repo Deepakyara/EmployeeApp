@@ -18,8 +18,8 @@ export var getLeaves = () =>{
     });
 }
 
-export var getLeavesById = (id) =>{
-    return fetch(apiEndPoint+"/"+id, {
+export var getLeavesById = (id, token) =>{
+    return fetch(apiEndPoint+"/"+id+"?token="+token, {
         method: 'get',headers: {
             'Content-Type': 'application/json;charset=utf-8'
         }
