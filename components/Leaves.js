@@ -1,106 +1,134 @@
-import React, { Component } from 'react';
-  import {
-      StyleSheet,
-      Text,
-      View,
-      TextInput,
-      Button,
-      TouchableHighlight,
-      Image,
-      Alert,
-      SafeAreaView,
-      FlatList,
-      ScrollView,
-      TouchableOpacity
-  } from 'react-native';
-import { getLeavesById } from '../services/LeavesPSQL';
-import { useEffect,useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { Image,FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Button } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { getAttendanceById } from "../services/AttendancePSQL";
+
+//let DATA = getCustomers();
+//console.log(">>>DATA>>>>>>>",DATA);
 
 
-const Item = ({ item, onPress,style }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.x, style]}>
+const Item = ({ item, onPress, style }) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View style={{
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'stretch',
       }}>
-        <View style={{flex:2,  height: 50}} >
-          <Text style={styles.body}> EmployeeID     : {item.employeeid}</Text>
-          <Text style={styles.body}> Startdate          : {item.startdate}</Text>
-          <Text style={styles.body}> Enddate   : {item.enddate}</Text>
-          <Text style={styles.body}> Count       : {item.count}</Text>
-        </View>
+        {/* <View style={{flex:8, height: 50, flexDirection: 'row'}} >
+            <View style={{flex:7, height: 50}}>
+                <Text style={styles.title}>{item.id}</Text>
+            </View>
+        </View> */}
+        <View style={{flex:2,  height: 90}} >
+            <Text style={styles.phone}>DATE                  : {item.date.substring(0,10)}</Text>
+            <Text style={styles.phone}>IN TIME              : {item.intimedate.substring(11,19)}</Text>
+            <Text style={styles.phone}>OUT TIME          : {item.outtime.substring(11,19)}</Text>
+            <Text style={styles.phone}>TOTAL HOURS  : {item.totalhours}</Text>
+        </View>  
       </View>
   </TouchableOpacity>
 );
 
-export default function Leaves()  {
-  const [leave, setLeave] = useState(null);
+const CustomerApp = () => {
+  const [selectedId, setSelectedId] = useState(null);
   const [count, doRender] = useState(0);
-  const [employees, setEmployees] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  let navigation = useNavigation();  // #6e3b6e #f9c2ff  
 
-
-  let loadEmployees = async () => {
-    let list = await getLeavesById(2);
-    setEmployees(list);
+   loadCustomer = async()=>{
+    let list = await getAttendanceById(1);
+    setCustomers(list);
+    console.log("list",list);
   }
 
   useEffect(()=>{
-      loadEmployees();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadCustomer();
+    });
+    return unsubscribe;
+  },[navigation]);
+
+  DATA = customers;
+  console.log("DATA>>>>>>",DATA);
+
 
 
   const renderItem = ({ item }) => {
+    const backgroundColor = item.id === selectedId ? "#4682b4" : "#F7F6F2";
+
     return (
       <Item
         item={item}
-        onPress={() => setLeave(item.id)}
+        onPress={() => setSelectedId(item.id)}
+        style={{ backgroundColor }}
       />
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.base1Text}>Leave Details</Text>
-        </View>
-      <FlatList style={{margin:-90,backgroundColor: 'green'}}
-        data={employees}
+      
+      <FlatList
+        data={DATA}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        extraData={leave}
+        extraData={selectedId}
       />
-      </SafeAreaView>
+     
+
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    color: '#000000',
-    fontSize: 20,
-    marginLeft:0,
-  },
-  x: {
-    padding: 90,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    marginLeft:0,
-  },
   container: {
-    backgroundColor:'white',
     flex: 1,
-    flexDirection: 'column',
-    marginTop: 0,
-},
-base1Text:{
-  marginTop:30,
-  fontSize:24,
-  marginHorizontal:120,
-  fontWeight:"bold",
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#6200EE',
-  marginBottom:0,
-},
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  
+  item: {
+    padding: 20,
+    marginVertical: 8,
+    borderColor: '#00ced1',
+    borderWidth:3,
+    marginHorizontal: 16,
+    shadowColor: "#07000e",
+
+shadowOpacity: 0.6,
+
+shadowRadius: 4,
+
+shadowOffset: {
+
+height: 6,
+
+width: 6
+
+}
+  },
+  title: {
+    fontSize: 32,
+    fontWeight:'bold',
+    color:'brown'
+  },
+  email: {
+    fontSize: 20,
+  },
+  phone: {
+    fontSize: 19,
+    fontFamily:"Times New Roman"
+  },
+  address: {
+    fontSize: 18,
+  },
+  dob: {
+    fontSize: 16,
+  },
+  tinyLogo: {
+    width: 30,
+    height: 30,
+  },
 });
+
+export default CustomerApp;
