@@ -23,19 +23,19 @@ const Item = ({ item, onPress, style }) => (
 
 const Attendance = () => {
   const [selectedId, setSelectedId] = useState(null);
-  const [leaves, setLeaves] = useState([]); 
+  const [attendance, setAttendance] = useState([]); 
 
 
-    let id = getId();
-    let token = getToken();
+  let id = getId();
+  let token = getToken();
 
-   loadLeaves = async()=>{
+  loadAttendance = async()=>{
     let list = await getAttendanceById(id, token);
-    setLeaves(list);
+    setAttendance(list);
   }
 
   useEffect(()=>{
-    loadLeaves();
+    loadAttendance();
   },[]);
 
 
@@ -54,7 +54,7 @@ const Attendance = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={leaves}
+        data={attendance}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         extraData={selectedId}
