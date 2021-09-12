@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { View,StyleSheet } from 'react-native'
 import {
     DrawerContentScrollView,
@@ -16,10 +16,26 @@ import {
     Switch
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons'
-
+import { getEmployeeById } from '../services/EmployeePSQL';
+import { getToken, getId} from '../services/Users'
 
 
 export function DrawerContent(props){
+
+  const [employee, setEmployee] = useState([]);
+  
+  let id = getId();
+  let token = getToken();
+
+  let loadEmployee = async () => {
+    let list = await getEmployeeById(id, token);
+    setEmployee(list);
+  }
+
+  useEffect(()=>{
+      loadEmployee();
+  }, []);
+  
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -33,7 +49,7 @@ export function DrawerContent(props){
                             size={50}
                             />
                             <View style={{marginLeft:15,flexDirection:'column'}}>
-                                <Title style={styles.title}>Deepak</Title>
+                                <Title style={styles.title}>{employee.name}</Title>
                                 <Caption style={styles.caption}></Caption>
                             </View>
                         </View>
