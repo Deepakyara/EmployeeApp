@@ -1,4 +1,4 @@
-import React, { Component,useState } from 'react';
+import React, { Component,useState,useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -13,35 +13,79 @@ import {
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {Picker} from '@react-native-picker/picker';
-import {getSalariesById} from '../services/SalariesPSQL';
-//{"id":2,"employeeid":2,"monthyear":"june2021","basic":"1000","hra":"1000","lta":"1000",
-//"variable":"1000","bonus":"5000","tds":"3","tax":"15","total":"49000","workingdaysinmonth":30,
-//
+import {getSalaries, getSalariesById} from '../services/SalariesPSQL';
+import {getEmployeeById} from '../services/EmployeePSQL';
+
 
 const SalarySlip = (props) => {
-    const [month, setMonth] = React.useState('06');
+    const [month, setMonth] = React.useState('june');
     const [year, setYear] = React.useState('2021');
+    const [employees, setEmployees] = useState([]);
 
-    let [employeeid,setEmployeeid] = React.useState('');
-    let [basic,setBasic] = React.useState('');
-    let [hra,setHRA] = React.useState('');
-    let [lta,setLTA] = React.useState('');
-    let [variable,setVariable] = React.useState('');
-    let [bonus,setBonus] = React.useState('');
-    let [tds,setTDS] = React.useState('');
-    let [tax,setTax] = React.useState('');
-    let [total,setTotal] = React.useState('');
-    let [workingdaysinmonth,setWorkingdaysinmonth] = React.useState('');
+    showPDF = () => {
+        console.log("PDF Button Clicked");
+        console.log("month : "+month);
+        console.log("year : "+year);
+        let m_y = month+year;
+        console.log("monthyear :: >> "+ m_y)
+        console.log("employees ::: >>> "+ JSON.stringify(employees))
+        let salarySlip={};
 
-    createPDF = async () => {
+        for (let i =0 ; i<employees.length ; i++){
+            console.log("inside for")
+            if (employees[i].employeeid == 2 && employees[i].monthyear == m_y){
+                console.log("i === ", i)
+                salarySlip = employees[i]
+                break;
+            }
+        }
+        createTwoButtonAlert(salarySlip);
+        salarySlip={};
+    }
+
+    const createTwoButtonAlert = (item) =>{
+        console.log(" inside alert fxn salary slip data :: "+ typeof item)
+        Alert.alert(
+          "Alert",
+          "Are you sure you want PDF of salary slip?",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => {
+              console.log("OK Pressed");
+              createPDF(item);
+              } 
+            }
+          ]
+        );
+    }
+
+    let loadEmployeeSalary = async () => {
+        let list = await getSalaries();
+        setEmployees(list);
+    }
+    
+    useEffect(()=>{
+        loadEmployeeSalary();
+    }, []);
+
+    createPDF = async (data) => {
+        console.log(" inside createpdf salary slip data is :: "+ JSON.stringify(data))
+        console.log(" inside createpdf salary slip data is :: "+ data)
+        console.log(" inside createpdf data.employeeid is :: "+ data.employeeid)
+
+        let temp_emp = await getEmployeeById(data.employeeid);
+        console.log("temp_emp : "+temp_emp.name)
+
+        let grossDeductions = parseInt(data.tds) + parseInt(data.tax) ;
+        let netPay = parseInt(data.total) + parseInt(grossDeductions);
         let options = {
-            html: '<table border="1">\
-            <tr>\
-            <th>Personel NO:</th>\
-            <td>0123456</td>\
-            <th>Name</th>\
-            <td>Chandra</td>\
-            </tr>\
+            html: "<br/>\
+            <br/><br/><table border='1'><tr><th>Personel NO:</th><td>"+data.employeeid+"\
+            </td><th>Name</th><td>"+temp_emp.name+"</td></tr>\
             <!-----2 row--->\
             <tr>\
             <th>Bank</th>\
@@ -68,7 +112,7 @@ const SalarySlip = (props) => {
             <th>Location</th>\
             <td>India</td>\
             <th>Working Days</th>\
-            <td>30</td>\
+            <td>"+data.workingdaysinmonth+"</td>\
             </tr>\
             <!------6 row---->\
             <tr>\
@@ -78,9 +122,11 @@ const SalarySlip = (props) => {
             <td>Designer</td>\
             </tr>\
             </table>\
+            \
+            \
             <tr></tr>\
             <br/>\
-            <table border="1">\
+            <table border='1'>\
             <tr>\
             <th >Earnings</th>\
             <th>Amount</th>\
@@ -89,76 +135,57 @@ const SalarySlip = (props) => {
             </tr>\
             <tr>\
             <td>Basic</td>\
-            <td>29000</td>\
+            <td>"+data.basic+"</td>\
             <td>provident fund</td>\
-            <td>1900</td>\
+            <td></td>\
             </tr>\
             <tr>\
-            <td>House Rent Allowance</td>\
-            <td>2000</td>\
-            <td>professional tax</td>\
-            <td>600</td>\
+            <td>HRA</td>\
+            <td>"+data.hra+"</td>\
+            <td>TDS</td>\
+            <td>"+data.tds+"</td>\
             </tr>\
             <tr>\
-            <td>special Allowance</td>\
-            <td>400</td>\
+            <td>LTA</td>\
+            <td>"+data.lta+"</td>\
             <td>Income tax</td>\
-            <td>500</td>\
+            <td>"+data.tax+"</td>\
             </tr>\
             <tr>\
-            <td>conveyance</td>\
-            <td>3000</td>\
+            <td>Variable</td>\
+            <td>"+data.variable+"</td>\
             </tr>\
             <tr>\
-            <td>ADD Special allowance</td>\
-            <td>2000</td>\
-            </tr>\
-            <tr>\
-            <td>shift Allowance</td>\
-            <td>1000</td>\
-            </tr>\
-            <tr>\
-            <td>bonus</td>\
-            <td>500</td>\
-            </tr>\
-            <tr>\
-            <td>medical Allowance</td>\
-            <td>600</td>\
+            <td>Bonus</td>\
+            <td>"+data.bonus+"</td>\
             </tr>\
             <tr>\
             <th>Gross Earnings</th>\
-            <td>Rs.38500</td>\
+            <td>"+data.total+"</td>\
             <th >Gross Deductions</th>\
-            <td>Rs.3000</td>\
+            <td>"+grossDeductions+"</td>\
             </tr>\
             <tr>\
             <td></td>\
             <td><strong>NET PAY</strong></td>\
-            <td>Rs.35500</td>\
+            <td>"+netPay+"</td>\
             <td></td>\
             </tr>\
-            </table>',
+            </table>",
             fileName: 'test',
             directory: 'Documents',
-          };
+        };
       
-          let file = await RNHTMLtoPDF.convert(options)
-           console.log(file.filePath);
-          alert(file.filePath);
-          Share.open({
-            title: "This is my report ",
-            message: "Message:",
+        let file = await RNHTMLtoPDF.convert(options)
+        console.log(file.filePath);
+        alert(file.filePath);
+        Share.open({
+            title: "This is my salary report ",
+            message: "Salary PDF",
             url: file.filePath,
             subject: "Report",
         })
-        console.log("pdf received...")
-    }
-
-    showPDF = () => {
-        console.log("PDF Button Clicked");
-        console.log("month : "+month);
-        console.log("year : "+year);
-        createPDF();
+        console.log("PDF Created")
     }
 
     return (
@@ -171,14 +198,14 @@ const SalarySlip = (props) => {
                         setMonth(itemValue)
                     }  
                 }>
-                    <Picker.Item label="Jan" value="01" />
-                    <Picker.Item label="Feb" value="02" />
-                    <Picker.Item label="Mar" value="03" />
-                    <Picker.Item label="Apr" value="04" />
-                    <Picker.Item label="May" value="05" />
-                    <Picker.Item label="Jun" value="06" />
-                    <Picker.Item label="Jul" value="07" />
-                    <Picker.Item label="Aug" value="08" />
+                    <Picker.Item label="Jan" value="jan" />
+                    <Picker.Item label="Feb" value="Feb" />
+                    <Picker.Item label="Mar" value="Mar" />
+                    <Picker.Item label="Apr" value="Apr" />
+                    <Picker.Item label="May" value="May" />
+                    <Picker.Item label="Jun" value="june" />
+                    <Picker.Item label="Jul" value="july" />
+                    <Picker.Item label="Aug" value="august" />
                     <Picker.Item label="Sep" value="09" />
                     <Picker.Item label="Oct" value="10" />
                     <Picker.Item label="Nov" value="11" />
@@ -204,10 +231,6 @@ const SalarySlip = (props) => {
             </View>
 
             <View style={styles.picker,{justifyContent:'center',alignContent:'center'}}>
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => showPDF()}>
-                    <Text style={{color:'white', fontWeight:'bold'}}>PDF</Text>
-                </TouchableHighlight>
-
                 <TouchableHighlight style={styles.buttonContainer} onPress={() => showPDF()}>
                     <Text style={{color:'white', fontWeight:'bold'}}>PDF</Text>
                 </TouchableHighlight>
