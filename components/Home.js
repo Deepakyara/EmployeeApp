@@ -11,16 +11,17 @@ import {
   SafeAreaView,
   ScrollView
 } from 'react-native';
+import {getId, getToken} from '../services/Users';
 import { getEmployeeById } from "../services/EmployeePSQL";
 
 export default function Login() {
-
   const [employee, setEmployee] = useState([]);
-
-  let id = 1;
+  
+  let id = getId();
+  let token = getToken();
 
   let loadEmployee = async () => {
-    let list = await getEmployeeById(id);
+    let list = await getEmployeeById(id, token);
     setEmployee(list);
   }
 
