@@ -22,6 +22,8 @@ export default function Login() {
 
   let loadEmployee = async () => {
     let list = await getEmployeeById(id, token);
+    list.dateOfBirth=list.dateOfBirth.substring(0,10)
+    list.dateOfJoining=list.dateOfJoining.substring(0,10)
     setEmployee(list);
   }
 
@@ -78,6 +80,10 @@ export default function Login() {
                     <Text style={styles.detailsTitle}>Role</Text>
                     <Text style={styles.detail}>{employee.role}</Text>
                 </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailsTitle}>Active</Text>
+                    <Text style={styles.detail}>{employee.active}</Text>
+                </View>
             </View>
               
         </View>
@@ -87,53 +93,53 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 15,
-    },
-    perDetContainer: {
-        margin: 8,
-        paddingBottom: 20
-    },
-    emplContainer: {
-        margin: 8,
-    },
-    welcomeContainer: {
-      flexDirection: "row",
-      marginBottom: 16,
-    },
-    name: {
-      fontSize: 30,
-      color: "#00ced1",
-      fontWeight: '900',
-      padding: 4,
-    },
-    subtitle: {
-      borderBottomColor: 'grey',
-      borderBottomWidth: 2,
-    },
-    subtitle1: {
-      fontSize: 24,
-      paddingBottom: 8,
-      color: '#150050',
-      fontWeight: '700'
-    },
-    detailsContainer: {
-      margin: 5,
-      backgroundColor: '#F7F6F2',
-      padding: 8,
-      borderBottomWidth: 3,
-      borderBottomColor: '#00ced1',
-      borderTopRightRadius: 75
-    },
-    detailsTitle: {
-      color: '#00ced1',
-      fontSize: 17,
-      fontWeight: '700',
-      paddingBottom: 7
-    },
-    detail: {
-      paddingTop: 4,
-      fontSize: 21,
-      fontFamily: "Times New Roman"
-    }
+  container: {
+      padding: 15,
+  },
+  perDetContainer: {
+      margin: 8,
+      paddingBottom: 20
+  },
+  emplContainer: {
+      margin: 8,
+  },
+  welcomeContainer: {
+    flexDirection: "row",
+    marginBottom: 16,
+  },
+  name: {
+    fontSize: 30,
+    color: "#00ced1",
+    fontWeight: '900',
+    padding: 4,
+  },
+  subtitle: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2,
+  },
+  subtitle1: {
+    fontSize: 24,
+    paddingBottom: 8,
+    color: '#150050',
+    fontWeight: '700'
+  },
+  detailsContainer: {
+    margin: 5,
+    backgroundColor: '#F7F6F2',
+    padding: 8,
+    borderBottomWidth: 3,
+    borderBottomColor: '#00ced1',
+    borderTopRightRadius: 75
+  },
+  detailsTitle: {
+    color: '#00ced1',
+    fontSize: 17,
+    fontWeight: '700',
+    paddingBottom: 7
+  },
+  detail: {
+    paddingTop: 4,
+    fontSize: 21,
+    fontFamily: "Times New Roman"
+  }
 });
