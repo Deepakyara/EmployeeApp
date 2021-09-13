@@ -18,8 +18,8 @@ export var getSalaries = () =>{
     });
 }
 
-export var getSalariesById = (id) =>{
-    return fetch(apiEndPoint+"/"+id, {
+export var getSalariesById = (id,monthyear,token) =>{
+    return fetch(apiEndPoint+"/"+id+"/"+monthyear+"?token="+token, {
         method: 'get',headers: {
             'Content-Type': 'application/json;charset=utf-8'
         }
