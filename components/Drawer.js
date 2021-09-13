@@ -48,13 +48,10 @@ export function DrawerContent(props){
                             }}
                             size={50}
                             />
-                            <View style={{marginLeft:15,flexDirection:'column'}}>
+                            <View style={{marginLeft:15,flexDirection:'column',marginTop:10}}>
                                 <Title style={styles.title}>{employee.name}</Title>
                                 <Caption style={styles.caption}></Caption>
                             </View>
-                        </View>
-                        <View style={{marginTop:30,marginLeft:5,paddingLeft:10,width:130,borderRadius:40,borderColor:'#bfbbbb',borderWidth:1}}>
-                                <Title style={{color:'#474646'}}>Edit Profile</Title>
                         </View>
                     </View>
                     <View
@@ -142,7 +139,7 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 16,
       marginTop: 3,
-      fontWeight: 'bold',
+      fontWeight: '500',
     },
     caption: {
       fontSize: 14,
