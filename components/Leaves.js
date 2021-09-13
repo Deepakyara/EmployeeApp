@@ -11,10 +11,10 @@ const Item = ({ item, onPress, style }) => (
         justifyContent: 'center',
         alignItems: 'stretch',
       }}>
-      <View style={{flex:2,  height: 80}} >
-        <Text style={styles.details}>Emp ID    : {item.employeeid}</Text>
-          <Text style={styles.details}>Startdate   : {item.startdate}</Text>
-          <Text style={styles.details}>Enddate    : {item.enddate}</Text>
+      <View style={{flex:2,  height: 70}} >
+        {/* <Text style={styles.details}>Emp ID    : {item.employeeid}</Text> */}
+          <Text style={styles.details}>Startdate   : {item.startdate.substring(0,10)}</Text>
+          <Text style={styles.details}>Enddate    : {item.enddate.substring(0,10)}</Text>
           <Text style={styles.details}>Count       : {item.count}</Text>
         </View>  
       </View>
@@ -24,13 +24,20 @@ const Item = ({ item, onPress, style }) => (
 const Leaves = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [leaves, setLeaves] = useState([]); 
+  const [total, setTotal] = useState(0); 
 
 
     let id = getId();
     let token = getToken();
 
    loadLeaves = async()=>{
+     count=0
     let list = await getLeavesById(id, token);
+    for(let i = 0;i<list.length;i++)
+    {
+      count=count+list[i].count
+    }
+    setTotal(count)
     setLeaves(list);
   }
 
@@ -53,6 +60,9 @@ const Leaves = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>
+        Total Leaves Applied : {total}
+      </Text>
       <FlatList
         data={leaves}
         renderItem={renderItem}
@@ -87,6 +97,12 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontFamily:"Times New Roman"
   },
+  header: {
+    padding: 20,
+    fontSize: 19,
+    fontWeight:'bold',
+    fontFamily:"Times New Roman"
+  }
 });
 
 export default Leaves;
