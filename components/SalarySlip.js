@@ -13,34 +13,24 @@ import {
 import Share from 'react-native-share';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {Picker} from '@react-native-picker/picker';
-import {getSalaries, getSalariesById} from '../services/SalariesPSQL';
+import {getSalariesById} from '../services/SalariesPSQL';
 import {getEmployeeById} from '../services/EmployeePSQL';
+import { getId,getToken } from '../services/Users';
 
 
 const SalarySlip = (props) => {
     const [month, setMonth] = React.useState('june');
     const [year, setYear] = React.useState('2021');
-    const [employees, setEmployees] = useState([]);
+    let employees;
 
-    showPDF = () => {
-        console.log("PDF Button Clicked");
-        console.log("month : "+month);
-        console.log("year : "+year);
-        let m_y = month+year;
-        console.log("monthyear :: >> "+ m_y)
-        console.log("employees ::: >>> "+ JSON.stringify(employees))
-        let salarySlip={};
-
-        for (let i =0 ; i<employees.length ; i++){
-            console.log("inside for")
-            if (employees[i].employeeid == 2 && employees[i].monthyear == m_y){
-                console.log("i === ", i)
-                salarySlip = employees[i]
-                break;
-            }
-        }
-        createTwoButtonAlert(salarySlip);
-        salarySlip={};
+    showPDF = async () => {
+      var id = getId();
+      var token = getToken();
+      let m_y = month+year;
+      let list = await getSalariesById(id,m_y,token);
+      employees = list[0]
+     
+        createTwoButtonAlert(employees);
     }
 
     const createTwoButtonAlert = (item) =>{
@@ -63,23 +53,9 @@ const SalarySlip = (props) => {
         );
     }
 
-    let loadEmployeeSalary = async () => {
-        let list = await getSalaries();
-        setEmployees(list);
-    }
-    
-    useEffect(()=>{
-        loadEmployeeSalary();
-    }, []);
 
     createPDF = async (data) => {
-        console.log(" inside createpdf salary slip data is :: "+ JSON.stringify(data))
-        console.log(" inside createpdf salary slip data is :: "+ data)
-        console.log(" inside createpdf data.employeeid is :: "+ data.employeeid)
-
-        let temp_emp = await getEmployeeById(data.employeeid);
-        console.log("temp_emp : "+temp_emp.name)
-
+        let temp_emp = await getEmployeeById(id, token);
         let grossDeductions = parseInt(data.tds) + parseInt(data.tax) ;
         let netPay = parseInt(data.total) + parseInt(grossDeductions);
         let options = {
@@ -273,7 +249,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 80,
         margin:8,
-        backgroundColor: "#6200ee",
+        backgroundColor: "#00ced1",
+        borderRadius:40
     }
 });
 
