@@ -18,4 +18,4 @@ Instructions
   8. Run: yarn install
   9. cd ios >> pod install
   10. cd ..
-  11. Run: react-native run-ios
+  11. For iOS run: react-native run-ios
