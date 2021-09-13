@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     },
     name: {
       fontSize: 30,
-      color: "#6600ee",
+      color: "#00ced1",
       fontWeight: '900',
       padding: 4,
     },
@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
       borderBottomWidth: 2,
     },
     subtitle1: {
-      fontSize: 25,
+      fontSize: 24,
       paddingBottom: 8,
-      color: '#000000',
+      color: '#150050',
       fontWeight: '700'
     },
     detailsContainer: {
@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
     },
     detailsTitle: {
       color: '#00ced1',
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: '700',
       paddingBottom: 7
     },
     detail: {
       paddingTop: 4,
-      fontSize: 23,
+      fontSize: 21,
       fontFamily: "Times New Roman"
     }
 });
