@@ -20,3 +20,4 @@ Instructions
   10. cd ios >> pod install
   11. cd ..
   12. For iOS run: react-native run-ios
+  13. For Login: email - emp2@mail.com, Password: Password
